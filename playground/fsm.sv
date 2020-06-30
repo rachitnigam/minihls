@@ -1,6 +1,6 @@
 module main (
   input logic clk,
-  output logic done
+  output reg done
 );
 
   logic [3:0] curr_state;
@@ -20,7 +20,7 @@ module main (
       end
       4'd1 : begin
         i <= i + 1;
-        curr_state <= curr_state + 1;
+        curr_state <= 4'dx;
       end
       default : begin
         i <= i;

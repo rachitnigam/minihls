@@ -27,7 +27,7 @@ class Parser():
         def number(p) -> SynthExpr:
             if isinstance(p[0], Num):
                 return p[0]
-            return Num(p[0].value)
+            return Num(int(p[0].value))
 
         @self.pg.production('id : ID')
         @self.pg.production('expr : id')
@@ -90,9 +90,9 @@ class Parser():
         def fsm_pre(p):
             return (p[3], p[8])
 
-        @self.pg.production('fsm_rule : NUMBER COLON action')
+        @self.pg.production('fsm_rule : number COLON action')
         def fsm_rule(p):
-            return (p[0].value, p[2])
+            return (p[0].val, p[2])
 
         @self.pg.production('fsm_rules : fsm_rule fsm_rules')
         @self.pg.production('fsm_rules : fsm_rule')
@@ -111,22 +111,3 @@ class Parser():
     def get_parser(self):
         return self.pg.build()
 
-
-if __name__ == '__main__':
-    text_input = """
-(start = 0, done = [6]) {
-  0: { a <= 4; b <= 12; next(1) }
-  1: { _cond <= b != 0; next(2) }
-  2: { next(_cond, 3, 6) }
-  3: { tmp <= b; next(4) }
-  4: { b <= a mod b; next(5) }
-  5: { a <= tmp; next(1) }
-  6: { b <= a; done }
-}
-    """
-    lexer = Lexer().get_lexer()
-    tokens = lexer.lex(text_input)
-
-    pg = Parser()
-    pg.parse()
-    print(pg.get_parser().parse(tokens).pretty())
