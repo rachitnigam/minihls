@@ -164,26 +164,11 @@ def lower_fsm(fsm: FSM):
     )
 
 
-if __name__ == '__main__':
-    text_input = """
-(start = 0, done = [6]) {
-  0: { a <= 4; b <= 12; next(1) }
-  1: { _cond <= b != 0; next(2) }
-  2: { next(_cond, 3, 6) }
-  3: { tmp <= b; next(4) }
-  4: { b <= a mod b; next(5) }
-  5: { a <= tmp; next(1) }
-  6: { b <= a; done }
-}
+def fsm_to_rtl(ast):
     """
-    lexer = Lexer().get_lexer()
-    tokens = lexer.lex(text_input)
-
-    pg = Parser()
-    pg.parse()
-    ast = pg.get_parser().parse(tokens)
-
+    Transform an FSM AST into RTL.
+    """
     out = lower_fsm(ast)
     codegen = ASTCodeGenerator()
-    rslt = codegen.visit(out)
-    print(rslt)
+    rtl = codegen.visit(out)
+    return rtl

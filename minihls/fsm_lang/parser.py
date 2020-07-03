@@ -111,3 +111,13 @@ class Parser():
     def get_parser(self):
         return self.pg.build()
 
+def parse_fsm(prog):
+    """
+    Parse a string-based representation of the FSM lang program.
+    """
+    lexer = Lexer().get_lexer()
+    tokens = lexer.lex(prog)
+
+    pg = Parser()
+    pg.parse()
+    return pg.get_parser().parse(tokens)

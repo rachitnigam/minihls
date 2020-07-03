@@ -20,6 +20,7 @@ class DirectNext(NextState):
 
     def __init__(self, state: int):
         """TODO: to be defined. """
+        assert isinstance(state, int), "state is not a an int: %s" % on_true
         self.state = state
 
     def pretty(self):
@@ -31,6 +32,12 @@ class CondNext(NextState):
 
     def __init__(self, cond: RegRef, on_true: int, on_false: int):
         """TODO: to be defined. """
+        assert isinstance(cond, RegRef), "Condition is not RegRef %s" % cond
+        assert isinstance(
+            on_true, int), "on_true is not a an int: %s" % on_true
+        assert isinstance(
+            on_false, int), "on_true is not a an int: %s" % on_false
+
         self.cond = cond
         self.on_true = on_true
         self.on_false = on_false
@@ -45,6 +52,11 @@ class CondNext(NextState):
 
 class Update:
     def __init__(self, register: RegRef, expr: SynthExpr):
+        assert isinstance(
+            register, RegRef), "register is not a RegRef: %s" % register
+        assert isinstance(
+            expr, SynthExpr), "expr is not a SynthExpr: %s" % expr
+
         self.register = register
         self.expr = expr
 
@@ -56,6 +68,12 @@ class Action:
     """Docstring for Action. """
 
     def __init__(self, updates: List[Update], next_state: NextState):
+        assert isinstance(
+            next_state, NextState), "next_state is not a NextState: %s" % next_state
+        assert all(map(lambda upd: isinstance(upd, Update), updates)), \
+            "updates contains something that is not an Update: %s" % ", ".join(
+                updates)
+
         self.updates = updates
         self.next_state = next_state
 
@@ -71,7 +89,16 @@ class FSM:
                  start_state: int,
                  done_states: List[int],
                  actions: Dict[int, Action]):
-        """TODO: to be defined. """
+        assert isinstance(
+            start_state, int), "start_state is not an int: %s" % start_state
+        assert all(map(lambda st: isinstance(st, int), done_states)), \
+            "done_states contains something that is not an int: %s" % ", ".join(
+                done_states)
+        assert all(map(
+            lambda kv: isinstance(kv[0], int) and isinstance(kv[1], Action),
+            actions.items()
+        )), "actions is malformed: %s" % actions
+
         self.start_state = start_state
         self.done_states = done_states
         self.actions = actions
@@ -80,7 +107,7 @@ class FSM:
         pretty_actions = [
             "%s: %s" % (k, v.pretty()) for k, v in self.actions.items()
         ]
-        pretty_done = [ str(st) for st in self.done_states ]
+        pretty_done = [str(st) for st in self.done_states]
         return "(start = %s, done = [%s]) {\n%s\n}" % (
             self.start_state,
             ", ".join(pretty_done),
