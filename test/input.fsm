@@ -1,9 +1,0 @@
-(start = 0, done = [6]) {
-  0: { a <= 4; b <= 12; next(1) }
-  1: { _cond <= b != 0; next(2) }
-  2: { next(_cond, 3, 6) }
-  3: { tmp <= b; next(4) }
-  4: { b <= a mod b; next(5) }
-  5: { a <= tmp; next(1) }
-  6: { b <= a; done }
-}

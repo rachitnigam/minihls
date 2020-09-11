@@ -7,3 +7,13 @@ miniHLS is a educational HLS compiler implemented in Python. It has two goals:
    passes.
 
 The generated code is guaranteed to run on Verilator.
+
+### Usage
+
+To compile programs from FSM to RTL, use:
+
+      python3 -m minihls.main -i fsm -o rtl <file>
+
+For example, for the example file `examples/input.fsm`, do:
+
+      python3 -m minihls.main -i fsm -o rtl examples/input.fsm
