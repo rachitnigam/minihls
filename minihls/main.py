@@ -25,9 +25,18 @@ if __name__ == '__main__':
         choices=list(Lang)
     )
 
+    parser.add_argument('BENCH')
+
     args = parser.parse_args()
 
     # Make sure we're trying to compile from a high-level language to a
     # lower-level one.
     assert args.input >= args.output, "Cannot compile from %s to %s." % (
         args.input, args.output)
+
+    # Read the input file
+    with open(args.BENCH, 'r') as f:
+        inp = f.read()
+
+    prog = args.input.as_parser()(inp)
+    print(args.input.lower_to(args.output)(prog))
